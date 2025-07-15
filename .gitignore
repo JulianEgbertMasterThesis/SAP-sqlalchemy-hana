@@ -1,0 +1,63 @@
+### Python ###
+__pycache__/
+*.py[cod]
+*.so
+venv/
+.Python
+build/
+develop-eggs/
+dist/
+eggs/
+lib/
+lib64/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+htmlcov/
+.coverage
+.cache
+coverage.xml
+pytest.ini
+
+### Linux ###
+*~
+.directory
+
+### OSX ###
+.DS_Store
+.AppleDouble
+.LSOverride
+.Spotlight-V100
+.Trashes
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+### Windows ###
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+### PyCharm ###
+.idea/
+*.ipr
+*.iml
+*.iws
+out/
+.idea_modules/
+
+### SublimeText ###
+*.sublime-workspace
+sftp-config.json
+
+### VisualStudioCode ###
+.vscode/*
+*.code-workspace
+
+### alembic testing ###
+scratch/
