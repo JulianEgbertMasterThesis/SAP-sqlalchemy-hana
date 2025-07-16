@@ -5,7 +5,7 @@ from __future__ import annotations
 import contextlib
 from contextlib import closing
 from types import ModuleType
-from typing import TYPE_CHECKING, Any, Callable, cast
+from typing import TYPE_CHECKING, Any, Callable, Optional, cast
 
 import hdbcli.dbapi
 import sqlalchemy
@@ -369,6 +369,10 @@ class HANATypeCompiler(compiler.GenericTypeCompiler):
         # SAP HANA has no UUID type, therefore delegate to NVARCHAR(32)
         return self._render_string_type(type_, "NVARCHAR", length_override=32)
 
+    # pylint: disable=invalid-name
+    def visit_JSON(self, type_: types.TypeEngine[Any], **kw: Any) -> str:
+        return self.visit_NCLOB(type_, **kw)
+
 
 class HANADDLCompiler(compiler.DDLCompiler):
     def visit_unique_constraint(
@@ -531,15 +535,22 @@ class HANAHDBCLIDialect(default.DefaultDialect):
     isolation_level = None
     default_schema_name: str  # this is always set for us
 
+    _json_deserializer = None
+    _json_serializer = None
+
     def __init__(
         self,
         isolation_level: str | None = None,
         use_native_boolean: bool = True,
+        json_serializer: Optional[Callable[[Any], str]] = None,
+        json_deserializer: Optional[Callable[[str], Any]] = None,
         **kw: Any,
     ) -> None:
         super().__init__(**kw)
         self.isolation_level = isolation_level
         self.supports_native_boolean = use_native_boolean
+        self._json_serializer = json_serializer
+        self._json_deserializer = json_deserializer
 
     @classmethod
     def import_dbapi(cls) -> ModuleType:
